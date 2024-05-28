@@ -1,5 +1,6 @@
 package com.doomole.portfolio.dto.response.freeNotice;
 
+import com.doomole.portfolio.dto.response.account.ResAccount;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,4 +14,6 @@ public class ResFreeNotice {
     private String updateDatetime;
     private int viewCount;
     private int recommendCount;
+
+    private ResAccount resAccount;
 }

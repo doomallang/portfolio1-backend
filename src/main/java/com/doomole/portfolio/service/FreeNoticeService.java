@@ -1,6 +1,7 @@
 package com.doomole.portfolio.service;
 
 import com.doomole.portfolio.dto.request.freeNotice.ReqFreeNotice;
+import com.doomole.portfolio.dto.response.account.ResAccount;
 import com.doomole.portfolio.dto.response.common.ResCommonList;
 import com.doomole.portfolio.dto.response.freeNotice.ResFreeNotice;
 import com.doomole.portfolio.entity.freeNotice.FreeNotice;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FreeNoticeService {
     private final FreeNoticeRepository freeNoticeRepository;
+    private final AccountService accountService;
 
     public ResCommonList<List<ResFreeNotice>> getFreeNoticeList(int page, String sortType, String searchText) {
         Sort sort = getSort(sortType);
@@ -73,6 +75,7 @@ public class FreeNoticeService {
     }
 
     public ResFreeNotice toResFreeNotice(FreeNotice freeNotice) {
+        ResAccount resAccount = accountService.toResAccount(freeNotice.getAccount());
         return ResFreeNotice.builder()
                 .freeNoticeIdx(freeNotice.getFreeNoticeIdx())
                 .title(freeNotice.getTitle())
@@ -81,6 +84,7 @@ public class FreeNoticeService {
                 .updateDatetime(freeNotice.getUpdateDatetime())
                 .viewCount(freeNotice.getViewCount())
                 .recommendCount(freeNotice.getRecommendCount())
+                .resAccount(resAccount)
                 .build();
     }
 

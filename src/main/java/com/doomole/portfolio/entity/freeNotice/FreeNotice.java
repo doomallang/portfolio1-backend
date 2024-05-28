@@ -1,5 +1,6 @@
 package com.doomole.portfolio.entity.freeNotice;
 
+import com.doomole.portfolio.entity.account.Account;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -34,4 +35,8 @@ public class FreeNotice {
 
     @Column(name = "recommend_count")
     private int recommendCount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_idx")
+    private Account account;
 }
