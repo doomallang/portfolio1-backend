@@ -1,9 +1,11 @@
 package com.doomole.portfolio.controller;
 
 import com.doomole.portfolio.dto.request.freeNotice.ReqFreeNotice;
+import com.doomole.portfolio.dto.request.freeNotice.ReqFreeNoticeComment;
 import com.doomole.portfolio.dto.response.common.ResCommonList;
 import com.doomole.portfolio.dto.response.common.ResSuccess;
 import com.doomole.portfolio.dto.response.freeNotice.ResFreeNotice;
+import com.doomole.portfolio.dto.response.freeNotice.ResFreeNoticeComment;
 import com.doomole.portfolio.exception.FailException;
 import com.doomole.portfolio.service.FileService;
 import com.doomole.portfolio.service.FreeNoticeService;
@@ -58,5 +60,33 @@ public class FreeNoticeController {
         ResFreeNotice resFreeNotice = freeNoticeService.getFreeNotice(freeNoticeIdx);
 
         return new ResSuccess<>(resFreeNotice);
+    }
+
+    @GetMapping("/comment")
+    public ResSuccess<List<ResFreeNoticeComment>> getFreeNoticeComment(@RequestParam(value="freeNoticeIdx") long freeNoticeIdx) {
+        List<ResFreeNoticeComment> list = freeNoticeService.getFreeNoticeCommentList(freeNoticeIdx);
+
+        return new ResSuccess<>(list);
+    }
+
+    @PostMapping("/comment")
+    public ResSuccess<String> addFreeNoticeComment(@RequestBody ReqFreeNoticeComment reqFreeNoticeComment) {
+        freeNoticeService.addFreeNoticeComment(reqFreeNoticeComment);
+
+        return new ResSuccess<>("success");
+    }
+
+    @PutMapping("/comment/recommend")
+    public ResSuccess<String> modifyCommentRecommend(@RequestBody ReqFreeNoticeComment reqFreeNoticeComment) {
+        freeNoticeService.modifyCommentRecommend(reqFreeNoticeComment);
+
+        return new ResSuccess<>("success");
+    }
+
+    @PutMapping("/recommend")
+    public ResSuccess<String> modifyNoticeRecommend(@RequestBody ReqFreeNoticeComment reqFreeNoticeComment) {
+        freeNoticeService.modifyNoticeRecommend(reqFreeNoticeComment);
+
+        return new ResSuccess<>("success");
     }
 }

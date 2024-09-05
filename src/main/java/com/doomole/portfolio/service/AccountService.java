@@ -1,6 +1,7 @@
 package com.doomole.portfolio.service;
 
 import com.doomole.portfolio.config.TokenProvider;
+import com.doomole.portfolio.converter.AccountConverter;
 import com.doomole.portfolio.dto.request.account.ReqAccount;
 import com.doomole.portfolio.dto.request.account.ReqPassword;
 import com.doomole.portfolio.dto.response.account.ResAccount;
@@ -38,7 +39,7 @@ public class AccountService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = tokenProvider.createToken(authentication);
             Account account = accountRepository.findByAccountId(reqAccount.getAccountId());
-            System.out.println("qqqqqqqqqqqqqq============");
+
             resToken.setToken(token);
             resToken.setAccountId(accountId);
             resToken.setAvatar(account.getAvatar());
@@ -63,7 +64,7 @@ public class AccountService {
         }
 
         String encPassword = encryptPassword(password);
-        Account account1 = toAccount(accountId, encPassword, name, nickname, email);
+        Account account1 = AccountConverter.toAccount(accountId, encPassword, name, nickname, email);
         accountRepository.save(account1);
 
         return account1.getAccountIdx();
@@ -71,7 +72,7 @@ public class AccountService {
 
     public ResAccount getInfo(String accountId) {
         Account account = accountRepository.findByAccountId(accountId);
-        ResAccount resAccount = toResAccount(account);
+        ResAccount resAccount = AccountConverter.toResAccount(account);
 
         return resAccount;
     }
@@ -106,30 +107,19 @@ public class AccountService {
         return accountRepository.findByAccountId(accountId);
     }
 
-    public Account toAccount(String accountId, String password, String name, String nickname, String email) {
-        return Account.builder()
-                .accountId(accountId)
-                .password(password)
-                .name(name)
-                .nickname(nickname)
-                .email(email)
-                .build();
-    }
 
-    public ResAccount toResAccount(Account account) {
-        return ResAccount.builder()
-                .accountIdx(account.getAccountIdx())
-                .accountId(account.getAccountId())
-                .name(account.getName())
-                .nickname(account.getNickname())
-                .email(account.getEmail())
-                .avatar(account.getAvatar())
-                .build();
-    }
 
     public String encryptPassword(String password) {
         return passwordEncoder.encode(password);
     }
 
     public boolean passwordMatch(String password, String encryptPassword) { return passwordEncoder.matches(password, encryptPassword); }
+
+    public void setPasswordInit() {
+        String password = encryptPassword("1");
+        Account account = accountRepository.findById(3L).get();
+
+        account.setPassword(password);
+        accountRepository.save(account);
+    }
 }

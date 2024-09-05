@@ -19,7 +19,7 @@ public class AccountController {
     @PostMapping("/login")
     public ResSuccess<ResToken> login(@RequestBody ReqAccount reqAccount) {
         ResToken resToken = accountService.login(reqAccount);
-        System.out.println(resToken);
+
         return new ResSuccess<>(resToken);
     }
 
@@ -53,5 +53,10 @@ public class AccountController {
         accountService.modify(reqAccount);
 
         return new ResSuccess<>("success");
+    }
+
+    @GetMapping("/test")
+    public void setPasswordInit() {
+        accountService.setPasswordInit();
     }
 }

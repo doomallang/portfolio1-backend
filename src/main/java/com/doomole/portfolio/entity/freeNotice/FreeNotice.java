@@ -4,6 +4,7 @@ import com.doomole.portfolio.entity.account.Account;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.CreatedDate;
 
 @Data
 @Builder
@@ -24,6 +25,7 @@ public class FreeNotice {
     @Column(name = "content")
     private String content;
 
+    @CreatedDate
     @Column(name = "create_datetime", updatable = false)
     private String createDatetime;
 
@@ -32,9 +34,6 @@ public class FreeNotice {
 
     @Column(name = "view_count")
     private int viewCount;
-
-    @Column(name = "recommend_count")
-    private int recommendCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_idx")

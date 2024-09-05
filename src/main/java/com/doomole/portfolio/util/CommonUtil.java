@@ -13,4 +13,11 @@ public class CommonUtil {
 
         return formatedNow;
     }
+
+    public static String localDatetimeToString(LocalDateTime localDateTime) {
+        if(localDateTime == null) {
+            return "";
+        }
+        return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
 }
