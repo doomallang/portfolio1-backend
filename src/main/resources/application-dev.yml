@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: dev
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        show_sql: true
+        format_sql: true
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:3306/test?socketTimeout=300000
+    username: root
+    password: 1234
+    driver-class-name: org.mariadb.jdbc.Driver
+    minimum-idle: 5
+    maximum-pool-size: 10
+    connection-timeout: 10000
+    validation-timeout: 10000
+    idle-timeout: 10000
+    max-lifetime: 290000
+
+http:
+  front:
+    host: https://dev.atstockipo.com:3400
+
+jwt:
+  header: Authorization
+  secret: a2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbQ==
+  token-validity-in-seconds: 3600000
+
+gpt:
+  key: t

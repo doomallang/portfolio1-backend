@@ -11,4 +11,6 @@ public class ReqFreeNotice {
     private String updateDatetime;
     private int viewCount;
     private int recommendCount;
+
+    private String accountId;
 }

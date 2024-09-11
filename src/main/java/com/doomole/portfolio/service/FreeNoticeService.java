@@ -51,7 +51,10 @@ public class FreeNoticeService {
 
         List<ResFreeNotice> resFreeNoticeList = new ArrayList<>();
         for(FreeNotice freeNotice : freeNoticeList) {
-            resFreeNoticeList.add(NoticeConverter.toResFreeNotice(freeNotice));
+            int recommendCount = noticeRecommendRepository.countByFreeNoticeIdx(freeNotice.getFreeNoticeIdx());
+            ResFreeNotice resFreeNotice = NoticeConverter.toResFreeNotice(freeNotice);
+            resFreeNotice.setRecommendCount(recommendCount);
+            resFreeNoticeList.add(resFreeNotice);
         }
 
         ResCommonList<List<ResFreeNotice>> list = new ResCommonList<>(count, resFreeNoticeList);
@@ -64,6 +67,9 @@ public class FreeNoticeService {
         long freeNoticeIdx = reqFreeNotice.getFreeNoticeIdx();
         String title = reqFreeNotice.getTitle();
         String content = reqFreeNotice.getContent();
+        String accountId = reqFreeNotice.getAccountId();
+
+        Account account = accountRepository.findByAccountId(accountId);
 
         // modify
         if(freeNoticeIdx != 0) {
@@ -74,6 +80,7 @@ public class FreeNoticeService {
         // add
         } else {
             freeNotice = NoticeConverter.toFreeNotice(freeNoticeIdx, title, content);
+            freeNotice.setAccount(account);
         }
 
         freeNoticeRepository.save(freeNotice);
@@ -83,6 +90,9 @@ public class FreeNoticeService {
 
     public ResFreeNotice getFreeNotice(long freeNoticeIdx) {
         FreeNotice freeNotice = freeNoticeRepository.findById(freeNoticeIdx).get();
+        freeNotice.setViewCount(freeNotice.getViewCount() + 1);
+        freeNoticeRepository.save(freeNotice);
+
         int count = noticeRecommendRepository.countByFreeNoticeIdx(freeNoticeIdx);
 
         ResFreeNotice resFreeNotice = NoticeConverter.toResFreeNotice(freeNotice);
