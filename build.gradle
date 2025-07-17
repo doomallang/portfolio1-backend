@@ -19,7 +19,15 @@ configurations {
 }
 
 repositories {
-    mavenCentral()
+    //mavenCentral()
+    maven {
+        url "http://nexus.svc-dev.com:8081/repository/maven2-proxy/" // Nexus로 변경
+        allowInsecureProtocol = true // Insecure HTTP 프로토콜 허용
+        credentials {
+            username = "admin"
+            password = "Aton1@3\$"
+        }
+    }
 }
 
 dependencies {
@@ -44,6 +52,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // JSON 파싱용
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    // Jsoup (HTML 파싱용)
+    implementation 'org.jsoup:jsoup:1.17.2'
+    // Apache Commons (문자열 등 유틸)
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    // swagger
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 }
 
 tasks.named('test') {

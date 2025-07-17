@@ -5,8 +5,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-        show_sql: true
-        format_sql: true
+        show_sql: false
+        format_sql: false
   datasource:
     url: jdbc:mariadb://127.0.0.1:3306/test?socketTimeout=300000
     username: root
@@ -19,6 +19,23 @@ spring:
     idle-timeout: 10000
     max-lifetime: 290000
 
+server:
+  tomcat:
+    connection-timeout: 300000  # 5분
+  shutdown: graceful
+  servlet:
+    session:
+      timeout: 30m
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 http:
   front:
     host: http://localhost:3000
@@ -30,3 +47,27 @@ jwt:
 
 gpt:
   key: t
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+
+logging:
+  config: classpath:logback-local.xml
+  level:
+    org.hibernate.SQL: off
+    org.hibernate.type.descriptor.sql: off
+    org.hibernate.type.descriptor.sql.BasicBinder: info
+    org.hibernate.type.descriptor.sql.BasicExtractor: off
+    io.awspring.cloud: trace
+    com:
+      doomole:
+        portfolio: debug
+
+api:
+  naver:
+    client-id: QJ27kn0CTDjEU5JbQcEJ
+    client-secret: khUpIjjM8T

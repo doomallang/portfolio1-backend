@@ -1,1 +1,15 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url "http://nexus.svc-dev.com:8081/repository/maven2-hosted/"
+            allowInsecureProtocol = true
+            credentials {
+                username = "admin"
+                password = "Aton1@3\$"
+            }
+        }
+    }
+}
+
 rootProject.name = 'portfolio'

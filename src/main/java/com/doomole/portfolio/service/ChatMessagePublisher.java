@@ -2,11 +2,13 @@ package com.doomole.portfolio.service;
 
 import com.doomole.portfolio.dto.chat.ChatMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +25,8 @@ public class ChatMessagePublisher {
 
     public void publish(ChatMessage message) {
         try {
+            long timestamp = System.currentTimeMillis();
+            message.setTimestamp(timestamp);
             // ChatMessage 객체를 JSON 문자열로 직렬화
             String messageJson = objectMapper.writeValueAsString(message);
 
@@ -37,25 +41,31 @@ public class ChatMessagePublisher {
             // TTL 설정 (예: 1시간 후 삭제)
             redisTemplate.expire(messageKey, 1, TimeUnit.HOURS);
             // Sorted Set에 메시지 키와 타임스탬프(score)를 저장
-            long timestamp = System.currentTimeMillis();
             redisTemplate.opsForZSet().add(CHAT_MESSAGES_KEY, messageKey, timestamp);
-
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
     }
 
-    public Set<String> getChatMessages() {
+    public List<ChatMessage> getChatMessages() {
         // Sorted Set에서 모든 메시지 키 가져오기
         Set<Object> messageKeys = redisTemplate.opsForZSet().range(CHAT_MESSAGES_KEY, 0, -1);
 
         // 각 키에 해당하는 실제 메시지 가져오기
-        Set<String> messages = new java.util.HashSet<>();
+        List<ChatMessage> messages = new java.util.ArrayList<>();
         if (messageKeys != null) {
             for (Object key : messageKeys) {
-                String message = (String) redisTemplate.opsForValue().get(key.toString());
-                if (message != null) {
-                    messages.add(message);
+                String messageJson = (String) redisTemplate.opsForValue().get(key.toString());
+                if (messageJson != null) {
+                    try {
+                        // JSON을 ChatMessage 객체로 변환
+                        ChatMessage message = objectMapper.readValue(messageJson, ChatMessage.class);
+                        messages.add(message); // 변환된 메시지를 리스트에 추가
+                    } catch (JsonMappingException e) {
+                        e.printStackTrace();
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

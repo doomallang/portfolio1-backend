@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity(debug = false)
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final String[] allowUrl = {"/account/**", "/freeNotice/**", "/favicon.ico", "/test/**", "/ws/**", "/api/**"};
+    private final String[] allowUrl = {"/account/**", "/freeNotice/**", "/favicon.ico", "/test/**", "/ws/**", "/api/**", "/swagger-ui/**", "/v3/api-docs/**", "/finance/**"};
     private final TokenProvider tokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;

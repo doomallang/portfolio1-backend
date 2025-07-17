@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping
@@ -31,9 +31,9 @@ public class ChatController {
 
     // Redis에서 모든 채팅 메시지를 가져오는 API
     @GetMapping("/api/chat/messages")
-    public ResSuccess<Set<String>> getChatMessages() {
-        Set<String> messageKeys = messagePublisher.getChatMessages();
+    public ResSuccess<List<ChatMessage>> getChatMessages() {
+        List<ChatMessage> messages = messagePublisher.getChatMessages();
 
-        return new ResSuccess<>(messageKeys);
+        return new ResSuccess<>(messages);
     }
 }

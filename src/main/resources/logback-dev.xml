@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration debug="true" scan="true">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <property name="LOG_DIR" value="../logs" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>[%d{yyyy-MM-dd}] [%d{HH:mm:ss.SSS}] [%p] [%t] [%c{1}] [%F:%L] %m%n</pattern>
+        </layout>
+    </appender>
+
+    <!-- SERVICE_FILE Appender -->
+    <appender name="SERVICE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/infoSafeBoxViewApi.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/%d{yyyy/MM,aux}/infoSafeBoxViewApi.%d{yyyyMMdd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd}] [%d{HH:mm:ss.SSS}] %-5level [%X{transactionId}] : %-30logger{0}:%-4line | %m%n</pattern>
+        </encoder>
+    </appender>
+    <!-- Loggers -->
+
+    <!-- spring core -->
+    <logger name="org.springframework.core" level="INFO" additivity="false">
+        <appender-ref ref="SERVICE_FILE" />
+    </logger>
+    <logger name="org.springframework.beans" level="INFO" additivity="false">
+        <appender-ref ref="SERVICE_FILE" />
+    </logger>
+    <logger name="org.springframework.context" level="INFO" additivity="false">
+        <appender-ref ref="SERVICE_FILE" />
+    </logger>
+    <logger name="org.springframework.web" level="INFO" additivity="false">
+        <appender-ref ref="SERVICE_FILE" />
+    </logger>
+
+    <!-- spring jpa -->
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="INFO" additivity="false">
+        <appender-ref ref="SERVICE_FILE" />
+    </logger>
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="SERVICE_FILE" />
+    </logger>
+    <logger name="org.hibernate.orm.jdbc.bind" level="TRACE" additivity="false">
+        <appender-ref ref="SERVICE_FILE" />
+    </logger>
+    <logger name="com.zaxxer.hikari.HikariConfig" level="INFO" additivity="false">
+        <appender-ref ref="SERVICE_FILE" />
+    </logger>
+
+    <!-- application -->
+    <logger name="com.doomole.portfolio" level="DEBUG" additivity="false">
+        <appender-ref ref="SERVICE_FILE" />
+    </logger>
+
+    <!-- 모든 로그 출력 (파일/콘솔) -->
+    <root level="INFO">
+        <appender-ref ref="SERVICE_FILE" />
+    </root>
+</configuration>

@@ -19,6 +19,14 @@ spring:
     idle-timeout: 10000
     max-lifetime: 290000
 
+logging:
+  config: classpath:logback-dev.xml
+  level:
+    io.awspring.cloud: trace
+    com:
+      doomole:
+        portfolio: debug
+
 http:
   front:
     host: https://dev.atstockipo.com:3400
